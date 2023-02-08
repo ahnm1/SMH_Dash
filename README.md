@@ -1,0 +1,14 @@
+## Playing and Plotting a Dash
+
+Another small part of a bigger graduation porject.  
+
+The idea is:  
+1. Pick data
+2. Normalize what is necessary
+3. Find pretty plots
+4. Layout  
+  
+Extras:  
+User interaction  
+Change theme  
+  
