@@ -21,7 +21,7 @@ df_price = pd.read_csv('elpriser_och_vader.csv', delimiter=';')
 #%%
 ## Normalize values in column for better visualization
 
-def normalize_values(df):
+def z_scale(df):
     # copy the data
     df_z_scaled = df.copy()
     
@@ -30,14 +30,22 @@ def normalize_values(df):
     # apply normalization technique to Column
         column = f'{column}'
         df_z_scaled[column] = (df_z_scaled[column] - df_z_scaled[column].mean()) / df_z_scaled[column].std()    
-    
-    # view normalized data  
+     
     return df_z_scaled
+
+#%%
+print(df_price)
+def min_max_scale(series):
+    return (series - series.min()) / (series.max() - series.min())
+
+for col in df_price.columns[2:]:
+        df_price[col] = min_max_scale(df_price[col])
+df_price
 
 #%%
 ## normalized df definitions 
 
-df_norm   = normalize_values(df_price)
+df_norm   = z_scale(df_price)
 
 timestamp = df_norm['Timestamp']
 temp      = df_norm['Lufttemperatur AVG']
@@ -62,19 +70,18 @@ fig = go.Figure()
 #%%
 ## Add Trace method
 
-fig.add_trace(make_scatter(timestamp, wind, 'wind', 'steelblue'))
-fig.add_trace(make_scatter(timestamp, temp, 'temp', 'gold'))
-# fig.add_trace(make_scatter(timestamp, price, 'price', 'green'))
-fig.add_trace()
+# fig.add_trace(make_scatter(timestamp, wind, 'wind', 'steelblue'))
+# fig.add_trace(make_scatter(timestamp, temp, 'temp', 'gold'))
+# # fig.add_trace(make_scatter(timestamp, price, 'price', 'green'))
+# fig.add_trace()
 
 #%%
 ## 3D plot
 
-# fig = 
-px.scatter_3d(df_norm, x = 'Lufttemperatur AVG', y = 'Vindhastighet AVG', z = 'SpotPriceEUR', color = 'Vindhastighet AVG')
+fig = px.scatter_3d(df_price, x = 'Lufttemperatur AVG', y = 'Vindhastighet AVG', z = 'SpotPriceEUR', color = 'Vindhastighet AVG')
 
 # %%
-# fig.show()
+fig.show()
 
 #%%
 ## All other power (px)
@@ -93,5 +100,24 @@ figg.update_layout(
 # %%
 ## save px.line dump
 
-with open('px_dump.json', 'w') as out:
-    out.writelines(f'{figg}')
+# with open('px_dump_scatter_3d.txt', 'w') as out:
+#     out.writelines(f'{fig}')
+
+#%%
+## Normalize with sklearn
+df_price_nums = df_price[
+    [df_price['Timestamp'],
+    df_price['Lufttemperatur AVG'],
+    df_price['Vindhastighet AVG'],
+    df_price['SpotPriceEUR']]
+]
+
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+
+scaler.fit(df_price_nums)
+scaled = scaler.fit_transform(df_price_nums)
+df_scaled = pd.DataFrame(scaled, columns = df_price_nums.columns)
+df_scaled
+
+# %%
