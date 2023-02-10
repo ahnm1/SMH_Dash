@@ -38,9 +38,9 @@ print(df_price)
 def min_max_scale(series):
     return (series - series.min()) / (series.max() - series.min())
 
-for col in df_price.columns[2:]:
-        df_price[col] = min_max_scale(df_price[col])
-df_price
+# for col in df_price.columns[2:]:
+#         df_price[col] = min_max_scale(df_price[col])
+# df_price
 
 #%%
 ## normalized df definitions 
@@ -79,7 +79,7 @@ fig = go.Figure()
 ## 3D plot
 
 fig = px.scatter_3d(df_price, x = 'Lufttemperatur AVG', y = 'Vindhastighet AVG', z = 'SpotPriceEUR', color = 'Vindhastighet AVG')
-
+fig.update_scenes(xaxis_autorange="reversed")
 # %%
 fig.show()
 
