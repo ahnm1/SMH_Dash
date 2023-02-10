@@ -13,7 +13,7 @@ h1, p {
 #graph-div {
     display: flex;
     grid-template-columns: 1fr 1fr;
-    width: 100vh;
+    width: 130vh;
 } 
 
 #s3d-graph {
@@ -23,9 +23,11 @@ h1, p {
     height: 96vh;
 }
 
-#line-graph-gwht, #line-graph-price {
-    /* width: 100vh; */
+#multi-graph-gwh {
+    width: 130vh;
+}
 
+#line-graph-price, #line-graph-gwht {
     /* padding-top: 8pt; */
     flex: 1;
 
