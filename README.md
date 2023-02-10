@@ -11,4 +11,5 @@ The idea is:
 Extras:  
 User interaction  
 Change theme  
-  
+
+###### Run app.py to start server
