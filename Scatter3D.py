@@ -10,7 +10,8 @@ class Scatter3D:
             x = 'Lufttemperatur AVG',
             y = 'Vindhastighet AVG',
             z = 'SpotPriceEUR',
-            color = 'Vindhastighet AVG'
+            color = 'Vindhastighet AVG',
+            hover_name = 'Timestamp'
         )
         fig_3d.update_layout(
             {'coloraxis': {'colorbar': {'title': {'text': 'Wind Average'}}}}
