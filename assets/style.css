@@ -1,8 +1,26 @@
+/* rubik-mono-one-regular - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Rubik Mono One';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/rubik-mono-one-v14-latin-regular.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/rubik-mono-one-v14-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../fonts/rubik-mono-one-v14-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+         url('../fonts/rubik-mono-one-v14-latin-regular.woff') format('woff'), /* Modern Browsers */
+         url('../fonts/rubik-mono-one-v14-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('../fonts/rubik-mono-one-v14-latin-regular.svg#RubikMonoOne') format('svg'); /* Legacy iOS */
+}
+
 html {
-    font-family: Arial, Helvetica, sans-serif;
+    /* font-family: Arial, Helvetica, sans-serif; */
+    font-family: Helvetica, sans-serif;
+    /* font-family: 'Rubik Mono One';
+    font-style: normal; */
     background-color: #1a1a1a;
     align-items: center;
 }
+
 
 h1, p {
     border-color: darkcyan;
