@@ -7,20 +7,20 @@ class Scatter3D:
     def get_plot(self, df_price):
         fig_3d = px.scatter_3d(
             df_price,
-            x = 'Lufttemperatur AVG',
-            y = 'Vindhastighet AVG',
-            z = 'SpotPriceEUR',
-            color = 'Vindhastighet AVG',
+            x = 'Temperature °C',
+            y = 'Wind m/s',
+            z = 'SEK/KWh',
+            color = 'Wind m/s',
             hover_name = 'Timestamp'
         )
         fig_3d.update_layout(
-            {'coloraxis': {'colorbar': {'title': {'text': 'Wind Average'}}}}
+            {'coloraxis': {'colorbar': {'title': {'text': 'Avg. Wind'}}}}
         )
         fig_3d.update_scenes( 
             {
-                'xaxis': {'title': {'text': 'Air Temperature'}},
-                'yaxis': {'title': {'text': 'Wind Average'}},
-                'zaxis': {'title': {'text': 'Spot Price €'}}
+                'xaxis': {'title': {'text': 'Avg. Temperature °C'}},
+                'yaxis': {'title': {'text': 'Avg. Wind m/s'}},
+                'zaxis': {'title': {'text': 'SEK / KWh'}}#'Spot Price €'}}
             },
             xaxis_autorange="reversed"
         )
