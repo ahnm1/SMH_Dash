@@ -34,7 +34,7 @@ def z_scale(df):
     return df_z_scaled
 
 #%%
-print(df_price)
+# print(df_price)
 def min_max_scale(series):
     return (series - series.min()) / (series.max() - series.min())
 
@@ -55,7 +55,7 @@ price     = df_norm['SpotPriceEUR']
 #%%
 ## go.Figure scatter-line function
 
-def make_scatter(x, y, name, color):
+def make_scatter(x, y, name):#, color):
     return go.Scatter(
         x = x,
         y = y,
@@ -63,7 +63,15 @@ def make_scatter(x, y, name, color):
         # marker_color = color,
         name = name,
         )
-    
+
+def make_bar(x, y, name):
+     return go.Bar(
+        x = x,
+        y = y,
+        # mode = 'markers',
+        # marker_color = color,
+        name = name,
+        )
 # %%
 
 fig = go.Figure()
@@ -103,21 +111,34 @@ figg.update_layout(
 # with open('px_dump_scatter_3d.txt', 'w') as out:
 #     out.writelines(f'{fig}')
 
-#%%
-## Normalize with sklearn
-df_price_nums = df_price[
-    [df_price['Timestamp'],
-    df_price['Lufttemperatur AVG'],
-    df_price['Vindhastighet AVG'],
-    df_price['SpotPriceEUR']]
-]
 
-from sklearn.preprocessing import MinMaxScaler
-scaler = MinMaxScaler()
-
-scaler.fit(df_price_nums)
-scaled = scaler.fit_transform(df_price_nums)
-df_scaled = pd.DataFrame(scaled, columns = df_price_nums.columns)
-df_scaled
 
 # %%
+nonull_file = 'nonull_elpriser_och_vader.csv'
+df_nonull = pd.read_csv(nonull_file, delimiter = ';')
+#%%
+# fig_price = 
+px.line(df_nonull, x = 'Timestamp', y = ['Vindhastighet AVG', 'Lufttemperatur AVG'])
+px.line(df_nonull, x = 'Timestamp', y = 'SpotPriceEUR')
+# px.line
+
+
+#%%
+## NONULL normalize
+for col in df_nonull.columns[2:]:
+        df_nonull[col] = min_max_scale(df_nonull[col])
+df_nonull
+#%%
+dfe['amount'] = min_max_scale(dfe['amount'])
+dfe_total = dfe.where(dfe['type'] == 'Total')
+#%%
+px.line(df_nonull, x = 'Timestamp', y = ['Lufttemperatur AVG', 'SpotPriceEUR', 'Vindhastighet AVG'])
+#%%
+px.line(df_nonull, x = 'Timestamp', y = 'SpotPriceEUR')
+
+#%%
+fig = go.Figure()
+fig.add_trace(make_bar(dfe_total['month'], dfe_total['amount'], 'Total GWh'))
+fig.add_trace(make_scatter(df_nonull['Timestamp'], df_nonull['SpotPriceEUR'], 'Spot Price €'))
+
+fig.add_trace(make_scatter(df_nonull['Timestamp'], df_nonull['Vindhastighet AVG'], 'Wind Average'))
