@@ -4,24 +4,18 @@ html {
 
     background-color: #1a1a1a;
     align-items: center;
-}
-
-h1 {
-    font-size: 48px;
-    tab-size: 16;
-}
-
-h1, p {
-    border-color: darkcyan;
-    margin: 20px;
     color: antiquewhite;
 }
-
-#graph-div {
-    display: flex;
-    grid-template-columns: 1fr 1fr;
-    width: 130vh;
-} 
+#_dash-global-error-container {
+    border: 32px solid;
+    border-color: #6a0094;
+    /* border-color: #960094; */
+}
+h1, h2, h3 {
+    font-size: 28px;
+    /* tab-size: 16; */
+    text-align: center;
+}
 
 #s3d-graph {
     border-radius: 30px;
@@ -30,12 +24,54 @@ h1, p {
     height: 96vh;
 }
 
+#input-field {
+    display: flex;
+    flex-direction: column;
+    /* grid-template-columns: 1fr; */
+    /* padding: 32; */
+    grid-template-columns: 1fr;
+    row-gap: 1em;
+    align-items: center;
+    border-color: darkcyan;
+    margin: 10px;
+}
+
+#input-hour, #input-month, #input-wind, #input-temperature {
+    height: 32px;
+    flex: 1;
+}
+
+#graph-div {
+    display: flex;
+    grid-template-columns: 1fr 1fr;
+    width: 130vh;
+}
+
+#line-graph-qwht {
+    flex: 2;
+}
+
+#augur-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+
+#augur-outer {
+    flex: 1;
+}
+
+#augur-outer p {
+    align-items: start;
+}
+
 #multi-graph-gwh {
     width: 130vh;
 }
 
 #line-graph-price, #line-graph-gwht {
-    /* padding-top: 8pt; */
     flex: 1;
+    width: 130vh;
 
 }
+
