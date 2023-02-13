@@ -43,9 +43,6 @@ app.layout = html.Div(children=[
             id='s3d-graph',
             figure = fig_3d
         ),
-    # html.H1(children = 'Does It = Price?'),
-    # html.P(children = 'So is there a correlation \
-    #     between temperature, wind and price for electricity.'),
     html.Div(children = [
         dcc.Graph(
             id='line-graph-qwht',
@@ -56,23 +53,23 @@ app.layout = html.Div(children=[
             html.Div([
                 
                 html.Div([
-                    "Hour: ",
+                    'Hour ',
                     dcc.Input(id='hour-in', value='0', type='number')
                 ]),
                 html.Br(),
                 html.Div([
-                    "Month: ",
-                    dcc.Input(id='month-in', value='0', max = 12, type='number')
+                    'Month ',
+                    dcc.Input(id='month-in', value='0', max = 12, min = 0,type='number')
                 ]),
                 html.Br(),
                 html.Div([
-                    "Wind: ",
-                    dcc.Input(id='wind-in', value='0', type='number')
+                    'Wind ',
+                    dcc.Input(id='wind-in', value='0', min = 0, type='number')
                 ]),
                 html.Br(),
                 html.Div([
-                    "Temperature: ",
-                    dcc.Input(id='temp-in', value='0', type='number')
+                    'Temp ',
+                    dcc.Input(id='temp-in', value='0', type='number', style = ({'align-items': 'end'}))
                 ]),
                 ], id = 'augur-inner'),
                 html.Br(),
@@ -81,16 +78,15 @@ app.layout = html.Div(children=[
                 html.Div(id='wind-output'),
 
                 html.Div(id='temp-output'),
-                # html.P('The predicted price is:'),
 
-                html.Div(id='result-output',style=({'font-size': 22})),
+                html.Div(id='result-output',style=({'font-size': 16, 'border-top': '2px solid purple', 'margin-top': '4px', 'padding-top': '4px'})),
                 html.P(id='fake-in'),
             
         ],id= 'augur-outer',style=({
             'align-items': 'center',
-            'margin-left': 42,
+            'margin-left': 32,
             'padding-left': 16,
-            'margin-right': 42,
+            'margin-right': 32,
             'padding-right': 16,
             }
             ))
@@ -122,19 +118,19 @@ def update_output_div(hour_val, month_val, wind_val, temp_val, result_str):
         print(f'{month_val}: no go', type(month_val))
         return (
             f'At {hour_val}:00,',
-            f'in th month of 0',
+            f'in the month of 0',
             f'with wind average at {wind_val} m/s',
             f'and average temperatur of {temp_val}°C',
-            f'Predicted price is: 0')
+            f'Predicted Price: 0 SEK / KWh')
 
     elif month_val == None:
         print(f'{month_val}: no go', type(month_val))
         return (
             f'At {hour_val}:00,',
-            f'in th month of 0',
+            f'in the month of 0',
             f'with wind average at {wind_val} m/s',
             f'and average temperatur of {temp_val}°C',
-            f'Predicted price is: 0')
+            f'Predicted Price: 0 SEK / KWh')
     else:
         print(f'{month_val}: yes go', type(month_val))
         result_str = ml.get_input_and_predict(wind_val, temp_val, month_val, hour_val)
@@ -142,10 +138,10 @@ def update_output_div(hour_val, month_val, wind_val, temp_val, result_str):
 
         return (
             f'At {hour_val}:00,',
-            f'in th month of {calendar.month_name[int(month_val)]}',
+            f'in the month of {calendar.month_name[int(month_val)]}',
             f'with wind average at {wind_val} m/s',
             f'and average temperatur of {temp_val}°C',
-            f'Predicted price is: {result_str}, SEK / KWh')
+            f'Predicted Price: {result_str} SEK / KWh')
 
 if __name__ == '__main__':
     app.run_server(debug = True)

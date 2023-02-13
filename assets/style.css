@@ -6,7 +6,7 @@ html {
     align-items: center;
     color: antiquewhite;
 }
-#_dash-global-error-container {
+#html-div { /*_dash-global-error-container {*/
     border: 32px solid;
     border-color: #6a0094;
     /* border-color: #960094; */
@@ -18,7 +18,7 @@ h1, h2, h3 {
 }
 
 #s3d-graph {
-    border-radius: 30px;
+    /* border-radius: 30px; */
     margin: 0;
     width: 130vh;
     height: 96vh;
@@ -48,7 +48,7 @@ h1, h2, h3 {
 }
 
 #line-graph-qwht {
-    flex: 2;
+    flex: 3;
 }
 
 #augur-inner {
@@ -58,6 +58,8 @@ h1, h2, h3 {
 }
 
 #augur-outer {
+    /* border: 2px solid;
+    border-color: #6a0094; */
     flex: 1;
 }
 
