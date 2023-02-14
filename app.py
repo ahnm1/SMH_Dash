@@ -156,7 +156,7 @@ def update_output_div(hour_val, day_val, month_val, wind_val, temp_val, result_s
         result_str = ml.get_input_and_predict(wind_val, temp_val, month_val, hour_val, day_val)
 
         return (
-            f'A {calendar.day_name[int(day_val)]}', f'at {hour_val}:00,',
+            f'A {calendar.day_name[int(day_val)-1]}', f'at {hour_val}:00,',
             f'in the month of {calendar.month_name[int(month_val)]}',
             f'with wind average at {wind_val} m/s',
             f'and average temperatur of {temp_val}°C',
