@@ -43,11 +43,11 @@ class MLPredict:
         c = cc.CurrencyConverter()
         y_pred = y_pred / 1000
         y_pred = y_pred * c.convert(1, 'EUR', 'SEK')
-        print("The price of electricity in the future is: " + str(y_pred[0].round(2)) + " SEK per Kwh")
+        # print("The price of electricity in the future is: " + str(y_pred[0].round(2)) + " SEK per Kwh")
         return y_pred[0].round(2)
 
 if __name__ == '__main__':
-    au = NewLogic()
+    au = MLPredict()
     runnum = 0
     start_t = time()
 
