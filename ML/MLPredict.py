@@ -51,7 +51,7 @@ if __name__ == '__main__':
     runnum = 0
     start_t = time()
 
-    for i in range(0,10):
+    for i in range(0,5):
         runnum += 1
         wind  = np.random.randint(0, 14)
         temp  = np.random.randint(-10, 24)
