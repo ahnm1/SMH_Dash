@@ -34,8 +34,8 @@ fig_3d   = Scatter3D().get_plot(dfc_price)
 fig_gwha = LineGraph().get_multi_energy_graph(dfe_no_total)
 fig_gwht = LineGraph().get_line_energy_graph(dfe.where(dfe['type'] == 'Total'))
 fig_gwht.update_traces(line_color='#c03bf5')
-with open('px_single.txt', 'w') as outp:
-            outp.write(str(fig_gwht))
+# with open('px_single.txt', 'w') as outp:
+#             outp.write(str(fig_gwht))
 
 fig_temp_wind = px.line(df_price, x = 'Timestamp', y = ['Vindhastighet AVG', 'Lufttemperatur AVG'], color_discrete_map={
     "Vindhastighet AVG": '#3BCDF5',#"#2362ec",
