@@ -30,13 +30,23 @@ dfc_price = df_price.round(1).copy()
 dfc_price.columns = new_p_columns
 
 fig_3d   = Scatter3D().get_plot(dfc_price)
-# fig_nonull = LineGraph().get_plot(
+
 fig_gwha = LineGraph().get_multi_energy_graph(dfe_no_total)
 fig_gwht = LineGraph().get_line_energy_graph(dfe.where(dfe['type'] == 'Total'))
+fig_gwht.update_traces(line_color='#c03bf5')
+with open('px_single.txt', 'w') as outp:
+            outp.write(str(fig_gwht))
 
-fig_temp_wind = px.line(df_price, x = 'Timestamp', y = ['Vindhastighet AVG', 'Lufttemperatur AVG'])
+fig_temp_wind = px.line(df_price, x = 'Timestamp', y = ['Vindhastighet AVG', 'Lufttemperatur AVG'], color_discrete_map={
+    "Vindhastighet AVG": '#3BCDF5',#"#2362ec",
+    "Lufttemperatur AVG": '#F5633B' #"#f5db1c"
+    }).update_layout({'legend': {'title': 'Parameter'},
+    'xaxis': {'title': {'text': 'Date'}},
+    'yaxis': {'title': {'text': 'Value'}}})
+
 ml  = MLPredict()
 app = Dash(__name__)
+app.title = 'PowerPredictors'
 app.layout = html.Div(children=[
     # html.H1(children='Wind + Temperature ?'),
     dcc.Graph(
@@ -46,7 +56,7 @@ app.layout = html.Div(children=[
     html.Div(children = [
         dcc.Graph(
             id='line-graph-qwht',
-            figure = fig_gwht,
+            figure = fig_temp_wind,
         ),
         html.Div([
             html.H3('Predict Price', style=({'align-items': 'center'})),
@@ -99,11 +109,11 @@ app.layout = html.Div(children=[
             ))
     ], id = 'graph-div'),
         dcc.Graph(
-            id = 'line-graph-price',
-            figure = fig_temp_wind,
+            id = 'line-graph-gwh',
+            figure = fig_gwht,
         ),  
     dcc.Graph(
-            id = 'multi-graph-gwh',
+            id = 'multi-graph-price',
             figure = fig_gwha
         ),
     
@@ -125,7 +135,7 @@ app.layout = html.Div(children=[
 )
 def update_output_div(hour_val, day_val, month_val, wind_val, temp_val, result_str):
     if month_val == '0':
-        print(f'{month_val}: no go', type(month_val))
+        # print(f'{month_val}: no go', type(month_val))
         return (
             f'A {day_val}', f'at {hour_val}:00,',
             f'in the month of 0',
@@ -134,7 +144,7 @@ def update_output_div(hour_val, day_val, month_val, wind_val, temp_val, result_s
             f'Predicted Price: 0 SEK / KWh')
 
     elif month_val == None:
-        print(f'{month_val}: no go', type(month_val))
+        # print(f'{month_val}: no go', type(month_val))
         return (
             f'A {day_val}', f'at {hour_val}:00,',
             f'in the month of 0',
@@ -142,9 +152,8 @@ def update_output_div(hour_val, day_val, month_val, wind_val, temp_val, result_s
             f'and average temperatur of {temp_val}°C',
             f'Predicted Price: 0 SEK / KWh')
     else:
-        print(f'{month_val}: yes go', type(month_val))
+        # print(f'{month_val}: yes go', type(month_val))
         result_str = ml.get_input_and_predict(wind_val, temp_val, month_val, hour_val, day_val)
-        # print(a)
 
         return (
             f'A {calendar.day_name[int(day_val)]}', f'at {hour_val}:00,',
