@@ -17,10 +17,13 @@ class LineGraph:
         return fig_gwha
     
     def get_line_energy_graph(self, df_total):
-        fig_gwht = px.line(df_total.where(df_total['type'] == 'Total'), x = 'month', y = 'amount')
+        fig_gwht = px.line(df_total.where(
+            df_total['type'] == 'Total'), x = 'month', y = 'amount')
         fig_gwht.update_layout(
             {'legend': {'title': 'Type'},
             'xaxis': {'title': {'text': 'Date'}},
             'yaxis': {'title': {'text': 'GWh'}}}
         )
+        
         return fig_gwht
+
