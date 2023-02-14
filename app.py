@@ -11,55 +11,75 @@ from LineGraph import LineGraph
 from ML.MLPredict import MLPredict
 
 pio.templates.default = 'plotly_dark' # 'ggplot2' 
-#%%
 
 EXCHANGE_RATE = 0.08918
 
 nonull_file = 'nonull_elpriser_och_vader.csv'
 df_price = pd.read_csv(nonull_file, delimiter = ';')
 
-#%%
-dfe         = pd.read_csv('full_clean_energy.csv')
+dfe          = pd.read_csv('full_clean_energy.csv')
 dfe_no_total = dfe.where(dfe['type'] != 'Total')
-# df_price = pd.read_csv('elpriser_och_vader.csv', delimiter=';')
-# df_price['SEK'] = df_price['SpotPriceEUR'] * EXCHANGE_RATE
+
 df_price['SEK/KWh'] = df_price['SpotPriceEUR'] * (EXCHANGE_RATE / 10)
 new_p_columns = ['Timestamp', 'PriceArea', 'Spot Price EUR', 'Wind m/s',
        'Temperature °C', 'SEK/KWh']
-dfc_price = df_price.round(1).copy()
+
+dfc_price = df_price.round(2).copy()
 dfc_price.columns = new_p_columns
 
+# 3D Plot, (id = s3d-graph)
 fig_3d   = Scatter3D().get_plot(dfc_price)
 
-fig_gwha = LineGraph().get_multi_energy_graph(dfe_no_total)
-fig_gwht = LineGraph().get_line_energy_graph(dfe.where(dfe['type'] == 'Total'))
-fig_gwht.update_traces(line_color='#c03bf5')
-# with open('px_single.txt', 'w') as outp:
-#             outp.write(str(fig_gwht))
-
+# Temp + Wind Plot, (id = line-graph-temp-wind)
 fig_temp_wind = px.line(df_price, x = 'Timestamp', y = ['Vindhastighet AVG', 'Lufttemperatur AVG'], color_discrete_map={
     "Vindhastighet AVG": '#3BCDF5',#"#2362ec",
-    "Lufttemperatur AVG": '#F5633B' #"#f5db1c"
+    "Lufttemperatur AVG": '#F5633B' #F5633B' #"#f5db1c"
     }).update_layout({'legend': {'title': 'Parameter'},
     'xaxis': {'title': {'text': 'Date'}},
     'yaxis': {'title': {'text': 'Value'}}})
+
+# Widget is here
+
+# Price Plot, id = (line-graph-price)
+fig_price = px.line(dfc_price,
+    x = 'Timestamp',
+    y = 'SEK/KWh',
+    title = 'Price Development')
+fig_price.update_traces(line_color='#E33466') # #c03bf5, #633BF5 #F53B70
+fig_price.update_layout({
+    'legend': {'title': 'Price SEK'},
+    'xaxis': {'title': {'text': 'Date'}},
+    'yaxis': {'title': {'text': 'SEK / KWh'}}
+    }
+)
+
+
+# Totat Production Plot, (id = line-graph-gwht)
+fig_gwht = LineGraph().get_line_energy_graph(dfe.where(dfe['type'] == 'Total'))
+fig_gwht.update_traces(line_color='darkcyan')
+
+# Multiline GWh by Type
+fig_gwha = LineGraph().get_multi_energy_graph(dfe_no_total)
+# with open('px_single.txt', 'w') as outp:
+#             outp.write(str(fig_gwht))
+
+
 
 ml  = MLPredict()
 app = Dash(__name__)
 app.title = 'PowerPredictors'
 app.layout = html.Div(children=[
-    # html.H1(children='Wind + Temperature ?'),
     dcc.Graph(
             id='s3d-graph',
             figure = fig_3d
         ),
     html.Div(children = [
         dcc.Graph(
-            id='line-graph-qwht',
+            id='line-graph-temp-wind',
             figure = fig_temp_wind,
         ),
-        html.Div([
-            html.H3('Predict Price', style=({'align-items': 'center'})),
+        html.Div([  # Div for Widget
+            html.H3('Augur', style=({'align-items': 'center', 'border-bottom': '2px solid #6a178b', 'margin-bottom': '8px', 'padding-bottom': '4px'})),
             html.Div([
                 
                 html.Div([
@@ -90,13 +110,10 @@ app.layout = html.Div(children=[
                 html.Br(),
                 html.Div(id='hour-output'),
                 html.Div(id='day-output'),
-                
                 html.Div(id='month-output'),
                 html.Div(id='wind-output'),
-
                 html.Div(id='temp-output'),
-
-                html.Div(id='result-output',style=({'font-size': 16, 'border-top': '2px solid purple', 'margin-top': '4px', 'padding-top': '4px'})),
+                html.Div(id='result-output',style=({'font-size': 16, 'border-top': '2px solid #6a178b', 'margin-top': '4px', 'padding-top': '4px'})),
                 html.P(id='fake-in'),
             
         ],id= 'augur-outer',style=({
@@ -109,11 +126,15 @@ app.layout = html.Div(children=[
             ))
     ], id = 'graph-div'),
         dcc.Graph(
+            id = 'line-graph-price',
+            figure = fig_price,
+        ), 
+        dcc.Graph(
             id = 'line-graph-gwh',
             figure = fig_gwht,
         ),  
     dcc.Graph(
-            id = 'multi-graph-price',
+            id = 'multi-graph-type',
             figure = fig_gwha
         ),
     
@@ -163,4 +184,4 @@ def update_output_div(hour_val, day_val, month_val, wind_val, temp_val, result_s
             f'Predicted Price: {result_str} SEK / KWh')
 
 if __name__ == '__main__':
-    app.run_server(debug = True)
+    app.run_server(debug = False)

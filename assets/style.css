@@ -4,7 +4,7 @@ html {
 
     background-color: #1a1a1a;
     align-items: center;
-    color: antiquewhite;
+    color: rgb(255, 249, 242);
 }
 #html-div { /*_dash-global-error-container {*/
     border: 32px solid;
@@ -22,8 +22,23 @@ h1, h2, h3 {
     margin: 0;
     width: 130vh;
     height: 96vh;
+    border-right: 32px #121212 solid;
 }
 
+/* This div cointains 2 elements below */
+#graph-div {
+    border-top: 2px solid #6a178b;
+    border-bottom: 2px solid #6a178b;
+    display: flex;
+    grid-template-columns: 1fr 1fr;
+    /* width: 130vh; */
+}
+
+#line-graph-temp-wind {
+    flex: 2;
+}
+
+/* Input widget */
 #input-field {
     display: flex;
     flex-direction: column;
@@ -39,16 +54,6 @@ h1, h2, h3 {
 #input-hour, #input-month, #input-wind, #input-temperature {
     height: 32px;
     flex: 1;
-}
-
-#graph-div {
-    display: flex;
-    grid-template-columns: 1fr 1fr;
-    width: 130vh;
-}
-
-#line-graph-qwht {
-    flex: 3;
 }
 
 #augur-inner {
@@ -67,13 +72,16 @@ h1, h2, h3 {
     align-items: start;
 }
 
-#multi-graph-gwh {
-    width: 130vh;
+/* #multi-graph-gwh,  */
+#line-graph-price {
+    /* width: 130vh; */
+    border-bottom: 2px solid #6a178b;
 }
 
-#line-graph-price, #line-graph-gwht {
-    flex: 1;
+#line-graph-price, #line-graph-gwht, #multi-graph-type {
+    /* flex: 1; */
+    border-top: 2px solid #6a178b;
+    border-right: 32px solid #121212;
     width: 130vh;
-
 }
 
