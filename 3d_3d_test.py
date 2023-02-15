@@ -1,6 +1,8 @@
 #%%
 import plotly.express as px
 import pandas as pd
+import plotly.io as pio
+pio.templates.default = 'plotly_dark' # 'ggplot2' 
 
 EXCHANGE_RATE = 0.08918
 
@@ -18,7 +20,8 @@ fig_3d = px.scatter_3d(
             y = 'Wind m/s',
             z = 'SEK/KWh',
             color = 'Wind m/s',
-            hover_name = 'Timestamp'
+            hover_name = 'Timestamp',
+            # title = 'Scatter'
         )
 
 fig_3d.update_layout(
