@@ -1,4 +1,3 @@
-#%%
 import calendar
 from dash import Dash, html, dcc, Input, Output
 import plotly.express as px
@@ -6,18 +5,18 @@ import plotly.graph_objects as go
 import pandas as pd
 import plotly.io as pio
 
-from Scatter3D import Scatter3D
-from LineGraph import LineGraph
+from tools.Scatter3D import Scatter3D
+from tools.LineGraph import LineGraph
 from ML.MLPredict import MLPredict
 
 pio.templates.default = 'plotly_dark' # 'ggplot2' 
 
 EXCHANGE_RATE = 0.08918
 
-nonull_file = 'nonull_elpriser_och_vader.csv'
+nonull_file = 'data/nonull_elpriser_och_vader.csv'
 df_price = pd.read_csv(nonull_file, delimiter = ';')
 
-dfe          = pd.read_csv('full_clean_energy.csv')
+dfe          = pd.read_csv('data/full_clean_energy.csv')
 dfe_no_total = dfe.where(dfe['type'] != 'Total')
 
 df_price['SEK/KWh'] = df_price['SpotPriceEUR'] * (EXCHANGE_RATE / 10)
@@ -53,16 +52,12 @@ fig_price.update_layout({
     }
 )
 
-
 # Totat Production Plot, (id = line-graph-gwht)
 fig_gwht = LineGraph().get_line_energy_graph(dfe.where(dfe['type'] == 'Total'))
 fig_gwht.update_traces(line_color='darkcyan')
 
 # Multiline GWh by Type
 fig_gwha = LineGraph().get_multi_energy_graph(dfe_no_total)
-# with open('px_single.txt', 'w') as outp:
-#             outp.write(str(fig_gwht))
-
 
 
 ml  = MLPredict()
@@ -156,7 +151,6 @@ app.layout = html.Div(children=[
 )
 def update_output_div(hour_val, day_val, month_val, wind_val, temp_val, result_str):
     if month_val == '0':
-        # print(f'{month_val}: no go', type(month_val))
         return (
             f'A {day_val}', f'at {hour_val}:00,',
             f'in the month of 0',
@@ -165,7 +159,6 @@ def update_output_div(hour_val, day_val, month_val, wind_val, temp_val, result_s
             f'Predicted Price: 0 SEK / KWh')
 
     elif month_val == None:
-        # print(f'{month_val}: no go', type(month_val))
         return (
             f'A {day_val}', f'at {hour_val}:00,',
             f'in the month of 0',
@@ -173,7 +166,6 @@ def update_output_div(hour_val, day_val, month_val, wind_val, temp_val, result_s
             f'and average temperatur of {temp_val}°C',
             f'Predicted Price: 0 SEK / KWh')
     else:
-        # print(f'{month_val}: yes go', type(month_val))
         result_str = ml.get_input_and_predict(wind_val, temp_val, month_val, hour_val, day_val)
 
         return (
