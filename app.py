@@ -1,20 +1,21 @@
 import calendar
 from dash import Dash, html, dcc, Input, Output
 import plotly.express as px
-import plotly.graph_objects as go
+# import plotly.graph_objects as go
 import pandas as pd
 import plotly.io as pio
 
 from tools.Scatter3D import Scatter3D
 from tools.LineGraph import LineGraph
 from ML.MLPredict import MLPredict
+from tools import augur
 
 pio.templates.default = 'plotly_dark' # 'ggplot2' 
 
 EXCHANGE_RATE = 0.08918
 
 nonull_file = 'data/nonull_elpriser_och_vader.csv'
-df_price = pd.read_csv(nonull_file, delimiter = ';')
+df_price    = pd.read_csv(nonull_file, delimiter = ';')
 
 dfe          = pd.read_csv('data/full_clean_energy.csv')
 dfe_no_total = dfe.where(dfe['type'] != 'Total')
@@ -73,52 +74,7 @@ app.layout = html.Div(children=[
             id='line-graph-temp-wind',
             figure = fig_temp_wind,
         ),
-        html.Div([  # Div for Widget
-            html.H3('Augur', style=({'align-items': 'center', 'border-bottom': '2px solid #6a178b', 'margin-bottom': '8px', 'padding-bottom': '4px'})),
-            html.Div([
-                
-                html.Div([
-                    'Hour ',
-                    dcc.Input(id='hour-in', value='0', type='number')
-                ]),
-                html.Br(),
-                html.Div([
-                    'Day ',
-                    dcc.Input(id='day-in', value='1', max = 7,min = 1, type='number')
-                ]),
-                html.Br(),
-                html.Div([
-                    'Month ',
-                    dcc.Input(id='month-in', value='1', max = 12, min = 1, type='number')
-                ]),
-                html.Br(),
-                html.Div([
-                    'Wind ',
-                    dcc.Input(id='wind-in', value='0', min = 0, type='number')
-                ]),
-                html.Br(),
-                html.Div([
-                    'Temp ',
-                    dcc.Input(id='temp-in', value='0', type='number', style = ({'align-items': 'end'}))
-                ]),
-                ], id = 'augur-inner'),
-                html.Br(),
-                html.Div(id='hour-output'),
-                html.Div(id='day-output'),
-                html.Div(id='month-output'),
-                html.Div(id='wind-output'),
-                html.Div(id='temp-output'),
-                html.Div(id='result-output',style=({'font-size': 16, 'border-top': '2px solid #6a178b', 'margin-top': '4px', 'padding-top': '4px'})),
-                html.P(id='fake-in'),
-            
-        ],id= 'augur-outer',style=({
-            'align-items': 'center',
-            'margin-left': 32,
-            'padding-left': 16,
-            'margin-right': 32,
-            'padding-right': 16,
-            }
-            ))
+        augur.widget
     ], id = 'graph-div'),
         dcc.Graph(
             id = 'line-graph-price',
@@ -176,4 +132,4 @@ def update_output_div(hour_val, day_val, month_val, wind_val, temp_val, result_s
             f'Predicted Price: {result_str} SEK / KWh')
 
 if __name__ == '__main__':
-    app.run_server(debug = False)
+    app.run_server(debug = True)
